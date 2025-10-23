@@ -1,0 +1,72 @@
+/* Variables de Color (Basadas en el diseño de PULFRUCO) */
+:root {
+    --pulfruco-primary: #ff5722;    /* Naranja rojizo, color principal */
+    --pulfruco-secondary: #ff8a65;  /* Naranja más claro */
+    --pulfruco-dark: #333;          /* Color de texto principal */
+    --pulfruco-footer-bg: #efebe9; /* Tono beige claro para el footer */
+}
+
+/* Estilos de Botones y Elementos de Marca */
+.btn-pulfruco-primary {
+    background-color: var(--pulfruco-primary);
+    border-color: var(--pulfruco-primary);
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.btn-pulfruco-primary:hover {
+    background-color: #e64a19; /* Tono más oscuro al pasar el ratón */
+    border-color: #e64a19;
+    color: #fff;
+}
+
+/* Estilo del Footer */
+footer {
+    background-color: var(--pulfruco-footer-bg); 
+    color: var(--pulfruco-dark);
+}
+
+footer a {
+    color: var(--pulfruco-dark);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--pulfruco-primary);
+}
+
+/* Estilo para los iconos de redes sociales (simulando los círculos del diseño) */
+.social-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #fff;
+    color: var(--pulfruco-primary);
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: var(--pulfruco-primary);
+    color: #fff;
+    border-color: var(--pulfruco-primary);
+}
+
+/* Ajuste para mantener el footer al final */
+html, body {
+    height: 100%;
+}
+.main-content {
+    flex: 1;
+}
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+
