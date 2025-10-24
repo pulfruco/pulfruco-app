@@ -55,6 +55,12 @@
                             </button>
                         </div>
                     </form>
+                    <div class="mt-4 pt-3 border-top text-center">
+                        ¿No tienes una cuenta? 
+                        <a href="{{ route('register') }}" class="text-decoration-none" style="color: var(--pulfruco-primary); font-weight: 500;">
+                            Regístrate aquí
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

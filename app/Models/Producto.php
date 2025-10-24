@@ -13,6 +13,8 @@ class Producto extends Model
         'nombre',
         'descripcion_corta',
         'descripcion_larga',
+        'beneficios', // 🟢 Nuevo
+        'presentaciones', // 🟢 Nuevo
         'precio',
         'imagen_ruta',
         'stock',
