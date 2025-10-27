@@ -32,6 +32,10 @@ Route::get('/productos', function () {
 // Cambiamos el Closure por el controlador
 Route::get('/productos', [CatalogoController::class, 'index'])->name('catalogo');
 
+// 🟢 Nueva Ruta API para la Búsqueda y Filtro AJAX
+// Esta ruta devolverá JSON y no la vista Blade.
+Route::get('/api/productos-filtrados', [CatalogoController::class, 'filter'])->name('catalogo.filter');
+
 // Ruta de Contacto
 Route::get('/contacto', function () {
     return view('contacto'); 

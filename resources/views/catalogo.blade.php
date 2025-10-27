@@ -10,6 +10,16 @@
 
     <div class="row">
         <div class="col-lg-3">
+            
+            <div class="mb-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search-input" placeholder="Buscar producto...">
+                    <button class="btn btn-outline-secondary" type="button" id="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-light">
                     <h5 class="mb-0"><i class="fas fa-filter me-2"></i> Filtrar por Línea</h5>
@@ -26,105 +36,101 @@
                     @endforeach
                 </div>
             </div>
-            
-            <div class="card shadow-sm p-3">
-                <p class="text-muted small mb-0">La funcionalidad de **Filtros por AJAX** y **Búsqueda Dinámica** se implementará en la **Fase 6**.</p>
-            </div>
-
         </div>
 
         <div class="col-lg-9">
             <div class="row" id="listado-productos">
-                @forelse ($productos as $producto)
-                    <div class="col-md-6 mb-4 producto-card" data-linea-id="{{ $producto->linea_id }}">
-                        <div class="card h-100 shadow-sm border-0">
-                            <div class="row g-0">
-                                <div class="col-4 d-flex align-items-center justify-content-center bg-light rounded-start">
-                                    @if ($producto->imagen_ruta)
-                                        <img src="{{ asset('storage/' . $producto->imagen_ruta) }}" class="img-fluid rounded-start" alt="{{ $producto->nombre }}" style="height: 150px; width: 100%; object-fit: cover;">
-                                    @else
-                                        <i class="fas fa-box-open fa-3x text-muted"></i>
-                                    @endif
-                                </div>
-                                <div class="col-8">
-                                    <div class="card-body">
-                                        <span class="badge" style="background-color: var(--pulfruco-primary);">{{ $producto->linea->nombre }}</span>
-                                        <h5 class="card-title mt-1">{{ $producto->nombre }}</h5>
-                                        <p class="card-text small text-muted">{{ $producto->descripcion_corta }}</p>
-
-                                        @if ($producto->beneficios)
-                                            <h6 class="text-secondary small mt-3">Beneficios Clave:</h6>
-                                            <ul class="list-unstyled small mb-0">
-                                                @php 
-                                                    // Convertir el texto de beneficios a una lista de elementos
-                                                    $beneficios = explode("\n", $producto->beneficios);
-                                                @endphp
-                                                @foreach ($beneficios as $beneficio)
-                                                    @if (trim($beneficio))
-                                                        <li class="d-flex align-items-center text-success"><i class="fas fa-check-circle me-1 small"></i> {{ trim($beneficio) }}</li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                        
-                                        <div class="d-flex justify-content-between align-items-end mt-3">
-                                            <div>
-                                                <h6 class="text-secondary small mb-1">Presentaciones:</h6>
-                                                @if ($producto->presentaciones)
-                                                    <span class="badge bg-secondary">{{ str_replace("\n", ' ', $producto->presentaciones) }}</span>
-                                                @else
-                                                    <span class="badge bg-light text-muted">No especificado</span>
-                                                @endif
-                                            </div>
-                                            <h4 class="text-end" style="color: var(--pulfruco-primary);">
-                                                ${{ number_format($producto->precio, 2) }}
-                                            </h4>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-warning text-center">No hay productos registrados en el catálogo.</div>
-                    </div>
-                @endforelse
+                @include('partials.product_cards', ['productos' => $productos])
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-3">Buscando productos...</p>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script src="{{ asset('js/appulfruco.js') }}"></script>
 <script>
-    // 💡 Implementación temporal del filtro (Sin AJAX - solo con JS de cliente)
     $(document).ready(function() {
-        $('.filter-linea').on('click', function(e) {
+        // Almacenar los parámetros de filtro actuales
+        let currentLineaId = 'all';
+        let currentSearchTerm = '';
+        let filterUrl = "{{ route('catalogo.filter') }}";
+        
+        // Función principal para realizar la solicitud AJAX
+        function fetchProducts() {
+            $('#loadingModal').modal('show'); // Mostrar loader
+
+            $.ajax({
+                url: filterUrl,
+                type: 'GET',
+                data: {
+                    linea_id: currentLineaId,
+                    search: currentSearchTerm
+                },
+                success: function(response) {
+                    // Reemplazar el contenido del listado con el HTML devuelto
+                    $('#listado-productos').html(response.html);
+                },
+                error: function() {
+                    $('#listado-productos').html('<div class="col-12"><div class="alert alert-danger text-center">Ocurrió un error al cargar los productos. Por favor, intente de nuevo.</div></div>');
+                },
+                complete: function() {
+                    $('#loadingModal').modal('hide'); // Ocultar loader
+                }
+            });
+        }
+        
+        // 1. Manejo del Filtro por Línea (Menú Lateral)
+        $('#linea-filtros').on('click', '.filter-linea', function(e) {
             e.preventDefault();
             
-            // 1. Obtener la ID de la línea a filtrar
-            var filterId = $(this).data('linea-id');
+            // Actualizar el parámetro de filtro
+            currentLineaId = $(this).data('linea-id');
 
-            // 2. Actualizar la clase activa del menú
+            // Actualizar clases activas
             $('.filter-linea').removeClass('active');
             $(this).addClass('active');
 
-            // 3. Mostrar u Ocultar productos
-            if (filterId === 'all') {
-                $('.producto-card').fadeIn(300);
-            } else {
-                $('.producto-card').hide();
-                // Mostrar solo los productos que coincidan con la línea ID
-                $('.producto-card[data-linea-id="' + filterId + '"]').fadeIn(300);
-            }
-            
-            // NOTA: Esta lógica se reemplazará por la petición AJAX en la Fase 6
-            console.log("Filtro aplicado (Cliente-Side). El filtro AJAX se implementará en la Fase 6.");
+            // Ejecutar la búsqueda AJAX
+            fetchProducts();
         });
+
+        // 2. Manejo de la Búsqueda por Texto
+        $('#search-button').on('click', function() {
+            currentSearchTerm = $('#search-input').val();
+            fetchProducts();
+        });
+        
+        // 3. Búsqueda al presionar Enter en el input
+        $('#search-input').on('keypress', function(e) {
+            if(e.which == 13) { // Tecla Enter
+                e.preventDefault();
+                currentSearchTerm = $(this).val();
+                fetchProducts();
+            }
+        });
+        
+        // Limpiar búsqueda si se borra el texto
+        $('#search-input').on('keyup', function() {
+            if ($(this).val() === '' && currentSearchTerm !== '') {
+                currentSearchTerm = '';
+                fetchProducts();
+            }
+        });
+
     });
 </script>
 @endsection
