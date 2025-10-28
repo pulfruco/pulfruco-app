@@ -32,6 +32,13 @@ Route::get('/productos', function () {
 // Cambiamos el Closure por el controlador
 Route::get('/productos', [CatalogoController::class, 'index'])->name('catalogo');
 
+// Ruta API para la Búsqueda y Filtro AJAX (Fase 6)
+Route::get('/api/productos-filtrados', [CatalogoController::class, 'filter'])->name('catalogo.filter');
+
+// 🟢 Nueva Ruta para la Página de Detalle del Producto
+// Usa el {producto:slug} para buscar por el campo 'slug' en lugar de 'id'
+Route::get('/productos/{producto:slug}', [CatalogoController::class, 'show'])->name('producto.detalle');
+
 // Ruta de Contacto
 Route::get('/contacto', function () {
     return view('contacto'); 

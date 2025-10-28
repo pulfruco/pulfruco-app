@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\Linea; // Necesario para el select
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; // Para manejar archivos
+use Illuminate\Support\Str; // 🟢 Importar la clase Str
 
 class ProductoController extends Controller
 {
@@ -42,6 +43,9 @@ class ProductoController extends Controller
 
         $data = $request->except('imagen'); // Obtener todos los datos excepto la imagen
 
+        // 🟢 CAMBIO CLAVE: Generar el slug a partir del nombre
+        $data['slug'] = Str::slug($request->nombre);
+
         // 💡 Manejo de la imagen
         if ($request->hasFile('imagen')) {
             // Guardar la imagen en storage/app/public/productos
@@ -62,7 +66,7 @@ class ProductoController extends Controller
         return view('admin.productos.edit', compact('producto', 'lineas'));
     }
 
-    // Actualizar un producto (incluye manejo de imagen)
+    // Actualizar un producto (incluye manejo de imagen y slug)
     public function update(Request $request, Producto $producto)
     {
         $request->validate([
@@ -76,6 +80,11 @@ class ProductoController extends Controller
         ]);
 
         $data = $request->except('imagen');
+
+        // 🟢 CAMBIO CLAVE: Actualizar el slug si el nombre ha cambiado
+    if ($request->nombre !== $producto->nombre) {
+        $data['slug'] = Str::slug($request->nombre);
+    }
 
         // 💡 Manejo de la imagen
         if ($request->hasFile('imagen')) {
