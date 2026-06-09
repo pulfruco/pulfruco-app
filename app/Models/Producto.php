@@ -11,6 +11,7 @@ class Producto extends Model
     protected $fillable = [
         'linea_id',
         'nombre',
+        'slug', // 🟢
         'descripcion_corta',
         'descripcion_larga',
         'beneficios', // 🟢 Nuevo
