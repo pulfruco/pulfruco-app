@@ -4,7 +4,7 @@
             <div class="row g-0">
                 <div class="col-4 d-flex align-items-center justify-content-center bg-light rounded-start">
 
-                    <a href="{{ route('producto.detalle', ['producto' => $producto->slug]) }}" class="d-block w-100 h-100 d-flex align-items-center justify-content-center p-2 text-decoration-none"> 
+                    <a href="{{ route('producto.detalle', ['producto' => $producto->slug ?? $producto->id]) }}" class="d-block w-100 h-100 d-flex align-items-center justify-content-center p-2 text-decoration-none">
                         @if ($producto->imagen_ruta)
                             <img src="{{ asset('storage/' . $producto->imagen_ruta) }}" class="img-fluid rounded-start" alt="{{ $producto->nombre }}" style="height: 150px; width: 100%; object-fit: cover;">
                         @else
@@ -18,7 +18,7 @@
                         <span class="badge" style="background-color: var(--pulfruco-primary);">{{ $producto->linea->nombre }}</span>
 
                         <h5 class="card-title mt-2">
-                            <a href="{{ route('producto.detalle', ['producto' => $producto->slug]) }}" class="text-decoration-none" style="color: #333; font-weight: bold;"> 
+                            <a href="{{ route('producto.detalle', ['producto' => $producto->slug ?? $producto->id]) }}" class="text-decoration-none" style="color: #333; font-weight: bold;">
                                 {{ $producto->nombre }}
                             </a>
                         </h5>
