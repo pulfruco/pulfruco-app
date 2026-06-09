@@ -3,34 +3,26 @@
         <div class="card h-100 shadow-sm border-0">
             <div class="row g-0">
                 <div class="col-4 d-flex align-items-center justify-content-center bg-light rounded-start">
-<<<<<<< HEAD
-                    @if ($producto->imagen_ruta)
-                        <img src="{{ asset('storage/' . $producto->imagen_ruta) }}" class="img-fluid rounded-start" alt="{{ $producto->nombre }}" style="height: 150px; width: 100%; object-fit: cover;">
-                    @else
-                        <i class="fas fa-box-open fa-3x text-muted"></i>
-                    @endif
-=======
-                    <a href="{{ route('producto.detalle', $producto->slug) }}" class="d-block w-100 h-100"> 
+
+                    <a href="{{ route('producto.detalle', ['producto' => $producto->slug]) }}" class="d-block w-100 h-100 d-flex align-items-center justify-content-center p-2 text-decoration-none"> 
                         @if ($producto->imagen_ruta)
                             <img src="{{ asset('storage/' . $producto->imagen_ruta) }}" class="img-fluid rounded-start" alt="{{ $producto->nombre }}" style="height: 150px; width: 100%; object-fit: cover;">
                         @else
                             <i class="fas fa-box-open fa-3x text-muted"></i>
                         @endif
                     </a>
->>>>>>> develop
+
                 </div>
                 <div class="col-8">
                     <div class="card-body">
                         <span class="badge" style="background-color: var(--pulfruco-primary);">{{ $producto->linea->nombre }}</span>
-<<<<<<< HEAD
-                        <h5 class="card-title mt-1">{{ $producto->nombre }}</h5>
-=======
-                        <h5 class="card-title mt-1">
-                            <a href="{{ route('producto.detalle', $producto->slug) }}" class="text-decoration-none" style="color: #333;"> 
+
+                        <h5 class="card-title mt-2">
+                            <a href="{{ route('producto.detalle', ['producto' => $producto->slug]) }}" class="text-decoration-none" style="color: #333; font-weight: bold;"> 
                                 {{ $producto->nombre }}
                             </a>
                         </h5>
->>>>>>> develop
+
                         <p class="card-text small text-muted">{{ $producto->descripcion_corta }}</p>
 
                         @if ($producto->beneficios)
