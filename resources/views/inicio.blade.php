@@ -49,6 +49,22 @@
     </button>
 </div>
 
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg welcome-message border-0 p-4 p-md-5 text-center mt-n5 position-relative z-1" style="background-color: #ffffff; border-top: 5px solid var(--pulfruco-primary);">
+                <h2 class="fw-bold mb-3" style="color: var(--pulfruco-primary);">Bienvenidos a Pulfruco</h2>
+                <p class="lead text-muted">
+                    Somos expertos en **pulpas de fruta 100% naturales**, elaboradas con las mejores frutas colombianas del **Valle del Cauca**. Nuestra misión es llevar la frescura, calidad y biodiversidad de nuestras tierras a tu negocio y hogar.
+                </p>
+                <p class="mb-0">
+                    Ofrecemos una amplia variedad de pulpas individuales y mezclas especialmente diseñadas para diferentes necesidades: **salud, deporte, energía y sabor**.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container my-5">
     <div class="text-center mb-5">
         <h2 class="display-6 fw-bold" style="color: var(--pulfruco-primary);">Nuestras Líneas de Producto</h2>
